@@ -20,7 +20,7 @@ AegisSync acts as a resilient middleware proxy. Applications on the edge node pu
 
 ```mermaid
 graph TD
-    subgraph Edge Node
+    subgraph edge_node [Edge Node]
         A[Local Application] -->|Push Event| B(System.Threading.Channels)
         B -->|Consume & Write| C[(Local SQLite Queue)]
         D{State Machine} -->|Offline| E[Buffer Locally]
@@ -28,12 +28,11 @@ graph TD
         C -->|Batch Read| F
     end
 
-    subgraph Central Server
+    subgraph central_server [Central Server]
         F -->|Protobuf Stream| G[gRPC Server Receiver]
         G -->|ACK| F
         G --> H[(Central Database)]
     end
-
 
 Key Engineering Decisions
 Producer/Consumer Pattern: Utilizes System.Threading.Channels for non-blocking, thread-safe event ingestion capable of handling thousands of events per second without dropping threads.
